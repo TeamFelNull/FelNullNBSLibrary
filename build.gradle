@@ -1,8 +1,11 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'signing'
 }
 
 group 'dev.felnull'
+archivesBaseName = "felnull-nbs-library"
 version '1.0'
 
 repositories {
@@ -16,4 +19,72 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'felnull-nbs-library'
+            from components.java
+            pom {
+                name = 'FelNullNBSLibrary'
+                description = 'NBS file playback library'
+                url = 'https://github.com/TeamFelnull/'
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License v3.0'
+                        url = 'https://www.gnu.org/licenses/lgpl-3.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'FelNull'
+                        name = 'TeamFelNull'
+                        email = 'teamfelnull@m.servg.red'
+                    }
+                    developer {
+                        id = 'MORIMORI0317'
+                        name = 'MORIMORI0317'
+                    }
+                }
+                scm {
+                    connection = 'git@github.com:TeamFelnull/FelNullNBSLibrary.git'
+                    developerConnection = 'git@github.com:TeamFelnull/FelNullNBSLibrary.git'
+                    url = 'https://github.com/TeamFelnull/FelNullNBSLibrary'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = System.getenv('sonatypeusername')
+                password = System.getenv('sonatypepassword')
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+    def signingKeyId = System.getenv('signingkeyid')
+    def signingKey = System.getenv('signingkey')
+    def signingPassword = System.getenv('signingpassword')
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+}
+
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+    options.charSet = 'UTF-8'
+    options.encoding = 'UTF-8'
 }

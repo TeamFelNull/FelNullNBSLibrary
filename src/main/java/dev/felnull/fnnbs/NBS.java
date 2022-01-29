@@ -105,13 +105,11 @@ public class NBS {
             for (int i = 0; i < cic; i++) {
                 customInstruments.add(new CustomInstrument(readString(stream), readString(stream), stream.read(), readBoolean(stream)));
             }
+        }
 
-
-            for (Layer layer : layers) {
-                Map<Integer, Note> notes = layer.getNotes();
-                notes.replaceAll((k, v) -> new InstrumentNote(this, v));
-            }
-
+        for (Layer layer : layers) {
+            Map<Integer, Note> notes = layer.getNotes();
+            notes.replaceAll((k, v) -> new InstrumentNote(this, v));
         }
     }
 
