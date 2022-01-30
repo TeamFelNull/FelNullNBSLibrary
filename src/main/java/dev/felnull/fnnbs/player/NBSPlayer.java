@@ -13,6 +13,8 @@ public class NBSPlayer {
     private int tick;
     private boolean loop;
     private boolean forcedLoop;
+    private int maxLoop = -1;
+    private int currentLoop;
 
     public NBSPlayer(NBS nbs, INBSPlayerImpl impl) {
         this.nbs = nbs;
@@ -41,12 +43,17 @@ public class NBSPlayer {
             }
         }
         tick++;
-
-        if ((loop && getNBS().isLoop() && getNBS().getLength() <= tick) || forcedLoop)
+        int lc = maxLoop < 0 ? Integer.MAX_VALUE : maxLoop;
+        if (getNBS().getLength() <= tick && (loop && getNBS().isLoop() || forcedLoop) && currentLoop < lc) {
             tick = getNBS().getLoopStart();
+            currentLoop++;
+        }
         return true;
     }
 
+    public void setMaxLoopCount(int maxLoop) {
+        this.maxLoop = maxLoop;
+    }
 
     public void setLoop(boolean loop) {
         this.loop = loop;
