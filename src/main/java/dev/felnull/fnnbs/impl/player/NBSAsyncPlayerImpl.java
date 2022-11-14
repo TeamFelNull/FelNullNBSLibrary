@@ -40,7 +40,7 @@ public class NBSAsyncPlayerImpl extends NBSPlayerImpl implements NBSAsyncPlayer 
     }
 
     private void runPlayer() {
-        while (isPlaying() && nbs.getSongLength() > tick.get()) {
+        while (isPlaying() && nbs.getSongLength() >= tick.get()) {
             if (!step())
                 break;
 

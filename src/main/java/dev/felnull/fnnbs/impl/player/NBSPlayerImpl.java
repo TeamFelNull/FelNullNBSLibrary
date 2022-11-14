@@ -37,7 +37,7 @@ public class NBSPlayerImpl implements NBSPlayer {
         if (loop && nbs.getSongLength() <= tick.get())
             tick.set(nbs.isLoop() ? nbs.getLoopStart() : 0);
 
-        return nbs.getSongLength() > tick.get();
+        return nbs.getSongLength() >= tick.get();
     }
 
     @Override
