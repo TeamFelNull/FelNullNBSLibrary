@@ -7,7 +7,7 @@ Supports NBS file version 5
 Gradle
 ```gradle
 dependencies {
-    implementation 'dev.felnull:felnull-nbs-library:1.1'
+    implementation 'dev.felnull:felnull-nbs-library:1.2'
 }
 ```
 
@@ -16,6 +16,6 @@ Maven
 <dependency>
     <groupId>dev.felnull</groupId>
     <artifactId>felnull-nbs-library</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 </dependency>
 ```
