@@ -138,7 +138,7 @@ public class NBSImpl implements NBS {
         byte[] dat = new byte[len];
         int ren = stream.read(dat);
 
-        if (ren != dat.length)
+        if (ren < 0)
             throw new IOException("String length mismatch");
 
         return new String(dat, StandardCharsets.UTF_8);
