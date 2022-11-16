@@ -25,7 +25,7 @@ public class NBSPlayerImpl implements NBSPlayer {
         if (tick.get() < 0 || nbs.getSongLength() <= tick.get())
             return false;
 
-        for (int i = 0; i < nbs.getLayerCount(); i++) {
+        for (int i = 0; i < nbs.getActualLayerCount(); i++) {
             Layer layer = nbs.getLayer(i);
             Note note = layer.getNote(tick.get());
             if (note != null)

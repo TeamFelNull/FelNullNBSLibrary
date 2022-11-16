@@ -56,10 +56,11 @@ public class NBSImpl implements NBS {
         if (this.version > 5)
             throw new RuntimeException("Unsupported nbs version");
 
-        layerCount = readShort(stream);
+        this.layerCount = readShort(stream);
         for (int i = 0; i < layerCount; i++) {
             layers.add(new LayerImpl());
         }
+
         this.name = readString(stream);
         this.author = readString(stream);
         this.originalAuthor = readString(stream);
@@ -98,19 +99,30 @@ public class NBSImpl implements NBS {
                 int panning = old ? 100 : stream.read();
                 int pitch = old ? 0 : readSignedShort(stream);
                 NoteImpl note = new NoteImpl(instrument, key, velocity, panning, pitch);
+
+                int ls = layers.size();
+                if (ls <= layer) {
+                    for (int i = 0; i <= ls - layer; i++)
+                        layers.add(new LayerImpl());
+                }
+
                 layers.get(layer).addNote(tick, note);
                 nextJL = readShort(stream);
             }
             nextJT = readShort(stream);
         }
 
-        if (!old) {
-            for (LayerImpl layer : layers) {
-                layer.setName(readString(stream));
+        for (int i = 0; i < layerCount; i++) {
+            LayerImpl layer = layers.get(i);
+
+            layer.setName(readString(stream));
+            if (!old)
                 layer.setLock(readBoolean(stream));
-                layer.setVolume(stream.read());
+
+            layer.setVolume(stream.read());
+
+            if (!old)
                 layer.setStereo(stream.read());
-            }
         }
 
         int cic = stream.read();
@@ -187,6 +199,10 @@ public class NBSImpl implements NBS {
     @Override
     public int getLayerCount() {
         return layerCount;
+    }
+
+    public int getActualLayerCount() {
+        return layers.size();
     }
 
     @Override

@@ -28,6 +28,8 @@ public interface NBS {
 
     int getLayerCount();
 
+    int getActualLayerCount();
+
     Layer getLayer(int num);
 
     @NotNull
